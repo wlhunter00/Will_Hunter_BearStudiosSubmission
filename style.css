@@ -30,3 +30,21 @@ footer {
   }
   .row.content {height:auto;}
 }
+
+h3{
+  margin-top: 10px;
+  margin-bottom:10px;
+}
+
+/* .mainHolder {
+  background-color:#f1f1f1;
+  height:inherit;
+}
+
+.bodyContent {
+    background-color: white;
+} */
+
+.sidenav {
+  background-color: white;
+}
