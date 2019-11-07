@@ -1,3 +1,10 @@
+<?php
+    // initalize php
+    ini_set("session.cookie_httponly", 1);
+    session_start();
+    require 'database.php';
+    $_SESSION['token'] = bin2hex(openssl_random_pseudo_bytes(32));
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -25,12 +32,12 @@
         </button>
       </div>
       <ul class="nav navbar-nav">
-        <li><a href="main_page.html">Home</a></li>
+        <li><a href="main_page.php">Home</a></li>
         <li class="dropdown">
           <a class="dropdown-toggle" data-toggle="dropdown" href="#">Explore the Pikers
             <span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li class="active"><a href="members.html">Members</a></li>
+            <li class="active"><a href="members.php">Members</a></li>
             <li><a href="#">Shows</a></li>
             <li><a href="#">Tickets</a></li>
             <li><a href="pastShows.html">Past Performances</a></li>
