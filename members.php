@@ -1,10 +1,3 @@
-<?php
-    // initalize php
-    ini_set("session.cookie_httponly", 1);
-    session_start();
-    require 'database.php';
-    $_SESSION['token'] = bin2hex(openssl_random_pseudo_bytes(32));
-?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -15,6 +8,32 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+  <script type="text/javascript">
+    $(document).ready(function(){
+          const sessionUsername = '<?php
+          session_start();
+          echo $_SESSION["username"];
+          ?>';
+          if(sessionUsername === ''){
+              $(".signedInNav").hide();
+              $(".signedOutNav").show();
+              console.log("No one signed in");
+          }
+          else{
+            $(".signedOutNav").hide();
+            $(".signedInNav").show();
+            console.log("Someone signed in");
+            }
+            $(".signOutThing").unbind().click(function(){
+              $(".signedInNav").hide();
+              $(".signedOutNav").show();
+              <?php
+              // session_start();
+              // session_destroy();
+              ?>
+            })
+    });
+  </script>
   <link rel="stylesheet" type="text/css" href="style.css" />
   <title>Our Members</title>
 </head>
@@ -24,7 +43,7 @@
   <nav class="navbar navbar-inverse">
     <div class="container-fluid">
       <div class="navbar-header">
-        <a class="navbar-brand" href="#">The Pikers</a>
+        <a class="navbar-brand" href="main_page.php">The Pikers</a>
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
@@ -46,8 +65,11 @@
         </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="signin.html"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
-        <li><a href="signup.html"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+        <li><a href="#" class = "signedInNav"><span class="glyphicon glyphicon-ok"></span> Welcome <?=$_SESSION['username']?></a></li>
+        <li><a class= "signOutThing signedInNav" href='#'><span class='glyphicon glyphicon-log-out'></span> Logout</a></li>
+        <li><a class = "signedOutNav" href="#"><span class="glyphicon glyphicon-globe"></span> Welcome Guest</a></li>
+        <li><a class = "signedOutNav" href="signin.html"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+        <li><a class = "signedOutNav" href="signup.html"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
       </ul>
     </div>
   </nav>

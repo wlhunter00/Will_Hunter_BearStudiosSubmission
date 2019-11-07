@@ -38,7 +38,7 @@
           header("Location: error.php");
           exit;
         }
-      }
+    }
     else {
     //else
         //redirect to login

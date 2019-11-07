@@ -1,5 +1,6 @@
 <?php
 session_start();
+ini_set('session.cookie_domain', '.domain.com');
  ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -13,7 +14,10 @@ session_start();
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
   <script type="text/javascript">
    $(document).ready(function(){
-      const sessionUsername = '<?=$_SESSION["username"]?>';
+      const sessionUsername = '<?php
+          session_start();
+          echo $_SESSION["username"];
+          ?>';
       if(sessionUsername === ''){
           $(".signedInNav").hide();
           $(".signedOutNav").show();
@@ -24,13 +28,10 @@ session_start();
         $(".signedInNav").show();
         console.log("Someone signed in");
         }
-        $(".signOutThing").unbind().click(function(){
+        $(".signOutThing").click(function(){
           $(".signedInNav").hide();
           $(".signedOutNav").show();
-          <?php
-          session_start();
-          session_destroy();
-          ?>
+          location.href = 'signOut.php';
         })
     });
   </script>
