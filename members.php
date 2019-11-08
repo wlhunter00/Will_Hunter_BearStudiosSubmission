@@ -23,15 +23,29 @@
             $(".signedOutNav").hide();
             $(".signedInNav").show();
             console.log("Someone signed in");
-            }
-            $(".signOutThing").unbind().click(function(){
-              $(".signedInNav").hide();
-              $(".signedOutNav").show();
-              <?php
-              // session_start();
-              // session_destroy();
-              ?>
-            })
+          }
+          if(sessionUsername === 'pikerAdmin'){
+              $(".editMemberForm").show();
+          }
+          else{
+            $(".editMemberForm").hide();
+          }
+          $(".signOutThing").unbind().click(function(){
+            $(".signedInNav").hide();
+            $(".signedOutNav").show();
+            location.href = 'signOut.php';
+          })
+          $('#exampleModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            var memName = button.prevAll('h3.memberName').text();
+            var memID = button.prevAll('input.memberID').val();
+            var memDesc = button.prevAll('p.memberDesc').text();
+            var modal = $(this);
+            console.log(memID);
+            modal.find('input.editMemberID').val(memID);
+            modal.find('input.editMemberName').val(memName);
+            modal.find('textarea.editMemberDescription').val(memDesc);
+          })
     });
   </script>
   <link rel="stylesheet" type="text/css" href="style.css" />
@@ -87,9 +101,13 @@
         <div class="row top-buffer">
           <div class="col-sm-4">
             <div class="well personContainer">
-              <h3 class="memberName1">Mike Boeckman</h3>
-              <img src="memberPhotos/mikeBoeckman.jpg" alt="Piker Image" class="memberPhoto1 img-fluid img-thumbnail">
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sit explicabo facilis eos! Nam id nulla itaque nostrum sit doloremque blanditiis minus nobis eos aspernatur! Mollitia, fugiat, consequuntur. Non accusamus, suscipit.</p>
+              <h3 class="memberName">Mike Boeckman</h3>
+              <img src="memberPhotos/mikeBoeckman.jpg" alt="Piker Image" class="memberPhoto img-fluid img-thumbnail">
+              <input type="hidden" class = "memberID" value="16">
+              <p class = "memberDesc">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sit explicabo facilis eos! Nam id nulla itaque nostrum sit doloremque blanditiis minus nobis eos aspernatur! Mollitia, fugiat, consequuntur. Non accusamus, suscipit.</p>
+              <button type="button" class="btn btn-primary editMemberForm" data-toggle="modal" data-target="#exampleModal">
+                Edit
+              </button>
             </div>
           </div>
           <div class="col-sm-4">
@@ -138,6 +156,38 @@
   <footer class="container-fluid text-center">
     <p>© 2019 The Pikers - Site Designed by Will Hunter</p>
   </footer>
+
+  <!-- edit modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Edit Post</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form action="editMembers.php" method="post">
+            <div class="form-group">
+              <label for="member-name" class="col-form-label">Member Name:</label>
+              <input type="text" class="form-control editMemberName" name = "editMemberName" id="member-name">
+            </div>
+            <div class="form-group">
+              <label for="description-text" class="col-form-label">Member Description:</label>
+              <textarea class="form-control editMemberDescription" name = "editMemberDescription" id="description-text"></textarea>
+            </div>
+            <input class = "editMemberID" type="hidden" name="editMemberID">
+            <button type="submit" class="btn btn-primary">Submit Changes</button>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </body>
 
 </html>

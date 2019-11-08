@@ -14,12 +14,12 @@
     $email = $inputEmail;
 
     //Check against users table
-    $stmt = $mysqli->prepare("select count(*) from users where username =?");
+    $stmt = $mysqli->prepare("select count(*) from users where email =?");
     if(!$stmt){
       printf("Query Prep Failed: %s\n", $mysqli->error);
       exit;
     }
-    $stmt->bind_param('s', $un);
+    $stmt->bind_param('s', $email);
     $stmt->execute();
     $stmt->bind_result($userExistCount);
     $stmt->fetch();
@@ -29,7 +29,7 @@
     //if exists
     if($userExistCount > 0){
         //redirect to error
-        $_SESSION['errorMessage'] = 'Username already exists!';
+        $_SESSION['errorMessage'] = 'Email already exists!';
         header("Location: error.php");
         exit;
       }
