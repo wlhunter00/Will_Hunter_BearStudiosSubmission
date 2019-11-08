@@ -73,7 +73,7 @@
             <li class="active"><a href="members.php">Members</a></li>
             <li><a href="#">Shows</a></li>
             <li><a href="#">Tickets</a></li>
-            <li><a href="pastShows.html">Past Performances</a></li>
+            <li><a href="pastShows.php">Past Performances</a></li>
             <li><a href="#">Give Feedback</a></li>
           </ul>
         </li>
@@ -99,50 +99,40 @@
           </div>
         </div>
         <div class="row top-buffer">
-          <div class="col-sm-4">
-            <div class="well personContainer">
-              <h3 class="memberName">Mike Boeckman</h3>
-              <img src="memberPhotos/mikeBoeckman.jpg" alt="Piker Image" class="memberPhoto img-fluid img-thumbnail">
-              <input type="hidden" class = "memberID" value="16">
-              <p class = "memberDesc">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sit explicabo facilis eos! Nam id nulla itaque nostrum sit doloremque blanditiis minus nobis eos aspernatur! Mollitia, fugiat, consequuntur. Non accusamus, suscipit.</p>
-              <button type="button" class="btn btn-primary editMemberForm" data-toggle="modal" data-target="#exampleModal">
-                Edit
-              </button>
-            </div>
-          </div>
-          <div class="col-sm-4">
-            <div class="well personContainer">
-              <h3 class="memberName2">Devon Finlay</h3>
-              <img src="memberPhotos/devonFinlay.jpg" alt="Piker Image" class="memberPhoto2 img-fluid img-thumbnail">
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sit explicabo facilis eos! Nam id nulla itaque nostrum sit doloremque blanditiis minus nobis eos aspernatur! Mollitia, fugiat, consequuntur. Non accusamus, suscipit.</p>
-            </div>
-          </div>
-          <div class="col-sm-4">
-            <div class="well personContainer">
-              <h3 class="memberName3">Collin S</h3>
-              <img src="memberPhotos/collinSzczepanski.jpg" alt="Piker Image" class="memberPhoto3 img-fluid img-thumbnail">
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sit explicabo facilis eos! Nam id nulla itaque nostrum sit doloremque blanditiis minus nobis eos aspernatur! Mollitia, fugiat, consequuntur. Non accusamus, suscipit.</p>
-            </div>
-          </div>
+        <?php
+          $countLoop = 0;
+          require 'database.php';
+          $stmt = $mysqli->prepare('SELECT memberID, memberName, memberDescription, imageLink FROM members');
+          if(!$stmt){
+              printf("Query Prep Failed: %s\n", $mysqli->error);
+              exit;
+          }
+          $stmt->execute();
+          $stmt->bind_result($memberID, $memberName, $memberDescription, $imageLink);
+          while($stmt->fetch()){
+            if($countLoop == 3){
+              echo '</div>';
+              echo '<div class="row top-buffer">';
+              $countLoop = 1;
+            }
+            echo  '<div class="col-sm-4">';
+            echo    '<div class="well personContainer">';
+            echo      '<h3 class="memberName">',$memberName, '</h3>';
+            echo      '<img src="', $imageLink, '" alt="Piker Image" class="memberPhoto img-fluid img-thumbnail">';
+            echo      '<input type="hidden" class = "memberID" value="', $memberID, '">';
+            echo      '<p class = "memberDesc">', $memberDescription, '</p>';
+            echo      '<button type="button" class="btn btn-primary editMemberForm" data-toggle="modal" data-target="#exampleModal">';
+            echo        'Edit';
+            echo      '</button>';
+            echo    '</div>';
+            echo  '</div>';
+            $countLoop = $countLoop + 1;
+
+          }
+         $stmt->close();
+         ?>
         </div>
-        <div class="row top-buffer">
-          <div class="col-sm-4">
-            <div class="well personContainer">
-              <h3 class="memberName4">Zach Eisner</h3>
-              <img src="memberPhotos/zachEisner.jpg" alt="Piker Image" class="memberPhoto4 img-fluid img-thumbnail">
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sit explicabo facilis eos! Nam id nulla itaque nostrum sit doloremque blanditiis minus nobis eos aspernatur! Mollitia, fugiat, consequuntur. Non accusamus, suscipit.</p>
-            </div>
-          </div>
-          <div class="col-sm-4">
-          </div>
-          <div class="col-sm-4">
-            <div class="well personContainer">
-              <h3 class="memberName5">Max Klapow</h3>
-              <img src="memberPhotos/maxKlapow.jpg" alt="Piker Image" class="memberPhoto5 img-fluid img-thumbnail">
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sit explicabo facilis eos! Nam id nulla itaque nostrum sit doloremque blanditiis minus nobis eos aspernatur! Mollitia, fugiat, consequuntur. Non accusamus, suscipit.</p>
-            </div>
-          </div>
-        </div>
+
       </div>
       <div class="col-sm-3 sidenav">
         <a class="twitter-timeline" data-lang="en" data-width="90%" data-height="60%" data-theme="dark" data-link-color="#E81C4F" href="https://twitter.com/ThePikers?ref_src=twsrc%5Etfw">Tweets by ThePikers</a>
@@ -150,8 +140,6 @@
       </div>
     </div>
   </div>
-  <!-- <div class="container" style="text-align:center">
-  </div> -->
   <!-- Footer -->
   <footer class="container-fluid text-center">
     <p>© 2019 The Pikers - Site Designed by Will Hunter</p>
